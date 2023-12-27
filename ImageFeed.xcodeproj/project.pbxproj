@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		84C79DB92B36305C00874653 /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C79DB82B36305C00874653 /* SingleImageViewController.swift */; };
 		84CB38442B1ECDD500BE29E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB38432B1ECDD500BE29E3 /* AppDelegate.swift */; };
 		84CB38462B1ECDD500BE29E3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB38452B1ECDD500BE29E3 /* SceneDelegate.swift */; };
 		84CB38482B1ECDD500BE29E3 /* ImagesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB38472B1ECDD500BE29E3 /* ImagesListViewController.swift */; };
@@ -14,9 +15,11 @@
 		84CB384D2B1ECDD600BE29E3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84CB384C2B1ECDD600BE29E3 /* Assets.xcassets */; };
 		84CB38502B1ECDD600BE29E3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84CB384E2B1ECDD600BE29E3 /* LaunchScreen.storyboard */; };
 		84CB38782B28238D00BE29E3 /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB38772B28238D00BE29E3 /* ImagesListCell.swift */; };
+		84CB38842B3126A000BE29E3 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB38832B3126A000BE29E3 /* ProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		84C79DB82B36305C00874653 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
 		84CB38402B1ECDD500BE29E3 /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84CB38432B1ECDD500BE29E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84CB38452B1ECDD500BE29E3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -26,6 +29,7 @@
 		84CB384F2B1ECDD600BE29E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84CB38512B1ECDD600BE29E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84CB38772B28238D00BE29E3 /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
+		84CB38832B3126A000BE29E3 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +43,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		84C79DBA2B36322D00874653 /* SingleImageView */ = {
+			isa = PBXGroup;
+			children = (
+				84C79DB82B36305C00874653 /* SingleImageViewController.swift */,
+			);
+			path = SingleImageView;
+			sourceTree = "<group>";
+		};
 		84CB38372B1ECDD500BE29E3 = {
 			isa = PBXGroup;
 			children = (
@@ -60,7 +72,9 @@
 			children = (
 				84CB38432B1ECDD500BE29E3 /* AppDelegate.swift */,
 				84CB38452B1ECDD500BE29E3 /* SceneDelegate.swift */,
+				84CB38802B31266700BE29E3 /* Profile */,
 				84CB38792B2823E700BE29E3 /* ImagesList */,
+				84C79DBA2B36322D00874653 /* SingleImageView */,
 				84CB38492B1ECDD500BE29E3 /* Main.storyboard */,
 				84CB384C2B1ECDD600BE29E3 /* Assets.xcassets */,
 				84CB384E2B1ECDD600BE29E3 /* LaunchScreen.storyboard */,
@@ -76,6 +90,14 @@
 				84CB38472B1ECDD500BE29E3 /* ImagesListViewController.swift */,
 			);
 			path = ImagesList;
+			sourceTree = "<group>";
+		};
+		84CB38802B31266700BE29E3 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				84CB38832B3126A000BE29E3 /* ProfileViewController.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -151,7 +173,9 @@
 			files = (
 				84CB38482B1ECDD500BE29E3 /* ImagesListViewController.swift in Sources */,
 				84CB38782B28238D00BE29E3 /* ImagesListCell.swift in Sources */,
+				84CB38842B3126A000BE29E3 /* ProfileViewController.swift in Sources */,
 				84CB38442B1ECDD500BE29E3 /* AppDelegate.swift in Sources */,
+				84C79DB92B36305C00874653 /* SingleImageViewController.swift in Sources */,
 				84CB38462B1ECDD500BE29E3 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
