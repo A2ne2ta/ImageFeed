@@ -37,6 +37,7 @@ final class ProfileViewController: UIViewController {
         
         nameLabel.text = "Екатерина Новикова"
         nameLabel.font = UIFont.boldSystemFont(ofSize: 23.0)
+        nameLabel.textColor = UIColor(named: "YP White")
         
         loginNameLabel.text = "@ekaterina_nov"
         loginNameLabel.font = UIFont.systemFont(ofSize: 13.0)
@@ -44,6 +45,7 @@ final class ProfileViewController: UIViewController {
         
         descriptionLabel.text = "Hello, World!"
         descriptionLabel.font = UIFont.systemFont(ofSize: 13.0)
+        descriptionLabel.textColor = UIColor(named: "YP White")
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(nameLabel)
