@@ -6,44 +6,53 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
-    private var avatarImageView: UIImageView?
-    private var nameLabel: UILabel?
-    private var loginNameLabel: UILabel?
-    private var descriptionLabel: UILabel?
+    private let avatarImageView = UIImageView()
+    private let nameLabel = UILabel()
+    private let loginNameLabel = UILabel()
+    private let descriptionLabel = UILabel()
     private var logoutButton: UIButton?
+
+    private let profileService = ProfileService.shared
     
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let profileImage = UIImage(named: "Avatar")
-        let imageView = UIImageView(image: profileImage)
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.didChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
         
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(imageView)
-        self.avatarImageView = imageView
+        avatarImageView.image = UIImage(named: "Avatar")
         
-        imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(avatarImageView)
         
-        let nameLabel = UILabel()
-        let loginNameLabel = UILabel()
-        let descriptionLabel = UILabel()
+        avatarImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
+        avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
+        avatarImageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        avatarImageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
         
-        nameLabel.text = "Екатерина Новикова"
+        nameLabel.text = profileService.profile?.username
         nameLabel.font = UIFont.boldSystemFont(ofSize: 23.0)
         nameLabel.textColor = UIColor(named: "YP White")
         
-        loginNameLabel.text = "@ekaterina_nov"
+        loginNameLabel.text = profileService.profile?.loginName
         loginNameLabel.font = UIFont.systemFont(ofSize: 13.0)
         loginNameLabel.textColor = UIColor(named: "YP Gray")
         
-        descriptionLabel.text = "Hello, World!"
+        descriptionLabel.text = profileService.profile?.bio
         descriptionLabel.font = UIFont.systemFont(ofSize: 13.0)
         descriptionLabel.textColor = UIColor(named: "YP White")
         
@@ -57,16 +66,13 @@ final class ProfileViewController: UIViewController {
         view.addSubview(descriptionLabel)
         
         NSLayoutConstraint.activate ([
-            nameLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
-            nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
+            nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
+            nameLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 8),
             loginNameLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             loginNameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
             descriptionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             descriptionLabel.topAnchor.constraint(equalTo: loginNameLabel.bottomAnchor, constant: 8),
         ])
-        self.nameLabel = nameLabel
-        self.loginNameLabel = loginNameLabel
-        self.descriptionLabel = descriptionLabel
         
         let logoutButton = UIButton.systemButton(
             with: UIImage(systemName: "ipad.and.arrow.forward")!,
@@ -79,18 +85,36 @@ final class ProfileViewController: UIViewController {
         view.addSubview(logoutButton)
         
         logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
-        logoutButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
+        logoutButton.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor).isActive = true
     }
     
     @objc
     private func didTapButton() {
+        avatarImageView.image = UIImage(named: "default_avatar")
         
-        nameLabel?.removeFromSuperview()
-        nameLabel = nil
-        loginNameLabel?.removeFromSuperview()
-        loginNameLabel = nil
-        descriptionLabel?.removeFromSuperview()
-        descriptionLabel = nil
-        avatarImageView?.image = UIImage(named: "default_avatar")
+        OAuth2TokenStorage.shared.clear()
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+        avatarImageView.kf.indicatorType = .activity
+        avatarImageView.kf.setImage(with: url,
+                                 placeholder: UIImage(named: "placeholder"),
+                                    options: [.processor(processor)])
+        avatarImageView.layer.cornerRadius = 35
+        avatarImageView.layer.masksToBounds = true
+    }
+}
+
+extension ProfileViewController {
+    private func updateProfileDetails(profile: Profile?) {
+        guard let profile = profile else { return }
+        nameLabel.text = profile.name
+        loginNameLabel.text = profile.loginName
+        descriptionLabel.text = profile.bio
     }
 }
