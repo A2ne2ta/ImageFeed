@@ -26,8 +26,7 @@ final class SplashViewController: UIViewController {
         imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         
-        if oauth2TokenStorage.token != nil {
-            guard let authToken = oauth2TokenStorage.token else { return }
+        if let authToken = oauth2TokenStorage.token {
             fetchProfile(token: authToken)
         } else {
             switchToAuthViewController()

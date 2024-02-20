@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import WebKit
 import Kingfisher
 
 final class ProfileViewController: UIViewController {
@@ -15,7 +16,7 @@ final class ProfileViewController: UIViewController {
     private let loginNameLabel = UILabel()
     private let descriptionLabel = UILabel()
     private var logoutButton: UIButton?
-
+    
     private let profileService = ProfileService.shared
     
     private var profileImageServiceObserver: NSObjectProtocol?
@@ -90,9 +91,36 @@ final class ProfileViewController: UIViewController {
     
     @objc
     private func didTapButton() {
-        avatarImageView.image = UIImage(named: "default_avatar")
+        let alert = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            preferredStyle: .alert)
         
-        OAuth2TokenStorage.shared.clear()
+        let acceptAction = UIAlertAction(
+            title: "Да",
+            style: .default) { [weak self] _ in
+                guard let self = self else { return }
+                OAuth2TokenStorage.shared.clear()
+                HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+                WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+                    records.forEach { record in
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+                    }
+                }
+                guard let window = UIApplication.shared.windows.first else { return assertionFailure("Invalid Configuration") }
+                window.rootViewController = SplashViewController()
+                window.makeKeyAndVisible()
+            }
+        
+        let deleteAction = UIAlertAction(
+            title: "Нет",
+            style: .default) { _ in
+                alert.dismiss(animated: true)
+            }
+        
+        alert.addAction(acceptAction)
+        alert.addAction(deleteAction)
+        self.present(alert, animated: true)
     }
     
     private func updateAvatar() {
@@ -103,7 +131,7 @@ final class ProfileViewController: UIViewController {
         let processor = RoundCornerImageProcessor(cornerRadius: 61)
         avatarImageView.kf.indicatorType = .activity
         avatarImageView.kf.setImage(with: url,
-                                 placeholder: UIImage(named: "placeholder"),
+                                    placeholder: UIImage(named: "placeholder"),
                                     options: [.processor(processor)])
         avatarImageView.layer.cornerRadius = 35
         avatarImageView.layer.masksToBounds = true
