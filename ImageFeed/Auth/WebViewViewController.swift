@@ -25,7 +25,7 @@ final class WebViewViewController: UIViewController {
         super.viewDidLoad()
         webView.navigationDelegate = self
         
-        var urlComponents = URLComponents(string: "https://unsplash.com/oauth/authorize")!
+        guard var urlComponents = URLComponents(string: ApiConstants.authURL) else { return }
         
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: ApiConstants.accessKey),
@@ -34,7 +34,7 @@ final class WebViewViewController: UIViewController {
             URLQueryItem(name: "scope", value: ApiConstants.accessScope)
         ]
         
-        let url = urlComponents.url!
+        guard let url = urlComponents.url else { return }
         let request = URLRequest(url: url)
         webView.load(request)
     }
@@ -56,7 +56,7 @@ final class WebViewViewController: UIViewController {
 
 extension WebViewViewController: WKNavigationDelegate {
     private func updateProgress() {
-        progressView.progress = Float(webView.estimatedProgress)
+        progressView.setProgress(Float(webView.estimatedProgress), animated: true)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
     

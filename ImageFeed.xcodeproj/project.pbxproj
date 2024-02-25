@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		848DB4C82B7C1834005F6B6D /* ImagesListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DB4C72B7C1834005F6B6D /* ImagesListService.swift */; };
+		848DB4CA2B7C2F9F005F6B6D /* PhotoResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DB4C92B7C2F9F005F6B6D /* PhotoResult.swift */; };
+		848DB4CC2B82BC14005F6B6D /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DB4CB2B82BC14005F6B6D /* Photo.swift */; };
 		849455F02B464136004033BD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849455EF2B464136004033BD /* Constants.swift */; };
 		849455F32B465EBC004033BD /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849455F22B465EBC004033BD /* AuthViewController.swift */; };
 		849455F52B466055004033BD /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849455F42B466055004033BD /* WebViewViewController.swift */; };
@@ -35,6 +38,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		848DB4C72B7C1834005F6B6D /* ImagesListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListService.swift; sourceTree = "<group>"; };
+		848DB4C92B7C2F9F005F6B6D /* PhotoResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoResult.swift; sourceTree = "<group>"; };
+		848DB4CB2B82BC14005F6B6D /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		849455EF2B464136004033BD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		849455F22B465EBC004033BD /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		849455F42B466055004033BD /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
@@ -89,6 +95,8 @@
 			children = (
 				849455F82B478615004033BD /* OAuth.swift */,
 				8494560E2B68A835004033BD /* ProfileImageModel.swift */,
+				848DB4C92B7C2F9F005F6B6D /* PhotoResult.swift */,
+				848DB4CB2B82BC14005F6B6D /* Photo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -102,6 +110,7 @@
 				849456082B675B00004033BD /* UIBlockingProgressHUD.swift */,
 				8494560A2B67628C004033BD /* ProfileService.swift */,
 				8494560C2B68A784004033BD /* ProfileImageService.swift */,
+				848DB4C72B7C1834005F6B6D /* ImagesListService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -263,9 +272,11 @@
 				84CB38482B1ECDD500BE29E3 /* ImagesListViewController.swift in Sources */,
 				84CB38782B28238D00BE29E3 /* ImagesListCell.swift in Sources */,
 				84CB38842B3126A000BE29E3 /* ProfileViewController.swift in Sources */,
+				848DB4C82B7C1834005F6B6D /* ImagesListService.swift in Sources */,
 				84CB38442B1ECDD500BE29E3 /* AppDelegate.swift in Sources */,
 				8494560F2B68A835004033BD /* ProfileImageModel.swift in Sources */,
 				8494560D2B68A784004033BD /* ProfileImageService.swift in Sources */,
+				848DB4CA2B7C2F9F005F6B6D /* PhotoResult.swift in Sources */,
 				849455FB2B4787CF004033BD /* OAuth2Service.swift in Sources */,
 				849456002B50EA58004033BD /* SplashViewController.swift in Sources */,
 				849456192B6B61D0004033BD /* TabBarController.swift in Sources */,
@@ -274,6 +285,7 @@
 				849455F02B464136004033BD /* Constants.swift in Sources */,
 				84C79DB92B36305C00874653 /* SingleImageViewController.swift in Sources */,
 				849455F52B466055004033BD /* WebViewViewController.swift in Sources */,
+				848DB4CC2B82BC14005F6B6D /* Photo.swift in Sources */,
 				84CB38462B1ECDD500BE29E3 /* SceneDelegate.swift in Sources */,
 				849456042B646054004033BD /* Network.swift in Sources */,
 				849455F92B478615004033BD /* OAuth.swift in Sources */,
