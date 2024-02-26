@@ -67,6 +67,7 @@ extension SplashViewController: AuthViewControllerDelegate {
             switch result {
             case .success(let token):
                 self.fetchProfile(token: token)
+                UIBlockingProgressHUD.show()
             case .failure:
                 UIBlockingProgressHUD.dismiss()
                 self.showAlert()

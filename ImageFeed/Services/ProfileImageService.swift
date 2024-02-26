@@ -18,10 +18,7 @@ final class ProfileImageService {
     
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
-        if task != nil {
-            task?.cancel()
-            return
-        }
+        guard task == nil else {return}
         
         guard let token = OAuth2TokenStorage.shared.token else {
             fatalError("Failed to get token")
@@ -29,14 +26,11 @@ final class ProfileImageService {
         
         guard let request = makeRequest(token: token, path: "/users/\(username)") else { return }
         
-        let session = URLSession.shared
-        let task = session.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             guard let self = self else { return }
-            self.task = nil
-            
             switch result {
             case .success(let body):
-                let avatarURL = body.profileImage.small
+                let avatarURL = body.profileImage.large
                 self.avatarURL = avatarURL
                 completion(.success(avatarURL))
                 
@@ -47,13 +41,12 @@ final class ProfileImageService {
                         userInfo: ["URL": avatarURL])
                 
             case .failure(let error):
+                self.task = nil
                 completion(.failure(error))
             }
         }
         self.task = task
         task.resume()
-        
-        
     }
 }
 

@@ -35,8 +35,6 @@ final class ProfileViewController: UIViewController {
             }
         updateAvatar()
         
-        avatarImageView.image = UIImage(named: "Avatar")
-        
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(avatarImageView)
         
@@ -100,7 +98,7 @@ final class ProfileViewController: UIViewController {
             title: "Да",
             style: .default) { [weak self] _ in
                 guard let self = self else { return }
-                OAuth2TokenStorage.shared.clear()
+                OAuth2TokenStorage().token = nil
                 HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
                 WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
                     records.forEach { record in
@@ -109,7 +107,6 @@ final class ProfileViewController: UIViewController {
                 }
                 guard let window = UIApplication.shared.windows.first else { return assertionFailure("Invalid Configuration") }
                 window.rootViewController = SplashViewController()
-                window.makeKeyAndVisible()
             }
         
         let deleteAction = UIAlertAction(

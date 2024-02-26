@@ -16,6 +16,7 @@ final class ImagesListService {
     private var task: URLSessionTask?
     private let urlSession = URLSession.shared
     private var lastLoadedPage: Int = 1
+    private let formatter = ISO8601DateFormatter()
     
     func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
@@ -61,7 +62,7 @@ final class ImagesListService {
     }
     
     private func convertDate(stringDate: String) -> Date? {
-        return stringDate == "" ? Date() : ISO8601DateFormatter().date(from: stringDate)
+        return stringDate == "" ? Date() : formatter.date(from: stringDate)
     }
     
     func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
