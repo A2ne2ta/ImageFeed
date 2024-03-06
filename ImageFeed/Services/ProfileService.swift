@@ -16,28 +16,22 @@ final class ProfileService {
 
     func fetchProfile(authToken: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         assert(Thread.isMainThread)
-        
-        if profile != nil { return }
-        task?.cancel()
+        guard task == nil else {return}
         
         guard let request = makeRequest(token: authToken, path: "/me") else { return }
         
-        let session = URLSession.shared
-        let task = session.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
-            DispatchQueue.main.async {
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
                 guard let self = self else { return }
-                self.task = nil
-                
                 switch result {
                 case .success(let profile):
                     let profile = Profile(result: profile)
                     self.profile = profile
-                    completion(.success(profile))
-                    
+                    completion(.success(self.profile!))
+                    self.task = nil
                 case .failure(let error):
                     completion(.failure(error))
+                    self.task = nil
                 }
-            }
         }
         self.task = task
         task.resume()

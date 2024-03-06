@@ -6,16 +6,24 @@
 //
 
 import UIKit
+import WebKit
 import Kingfisher
 
-final class ProfileViewController: UIViewController {
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfileViewPresenterProtocol? { get set }
+    func updateAvatar()
+    
+}
+
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
     
     private let avatarImageView = UIImageView()
     private let nameLabel = UILabel()
     private let loginNameLabel = UILabel()
     private let descriptionLabel = UILabel()
     private var logoutButton: UIButton?
-
+    var presenter: ProfileViewPresenterProtocol?
+    
     private let profileService = ProfileService.shared
     
     private var profileImageServiceObserver: NSObjectProtocol?
@@ -23,18 +31,9 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateAvatar()
-            }
-        updateAvatar()
-        
-        avatarImageView.image = UIImage(named: "Avatar")
+        presenter = ProfileViewPresenter()
+        presenter?.view = self
+        presenter?.viewDidLoad()
         
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(avatarImageView)
@@ -82,6 +81,7 @@ final class ProfileViewController: UIViewController {
         
         logoutButton.tintColor = UIColor(named: "YP Red")
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
+        logoutButton.accessibilityIdentifier = "logout"
         view.addSubview(logoutButton)
         
         logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
@@ -90,20 +90,17 @@ final class ProfileViewController: UIViewController {
     
     @objc
     private func didTapButton() {
-        avatarImageView.image = UIImage(named: "default_avatar")
-        
-        OAuth2TokenStorage.shared.clear()
+        if let alert = presenter?.prepareAlert() {
+            self.present(alert, animated: true)
+        }
     }
     
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
+    func updateAvatar() {
+        let url = presenter?.getImageURL()
         let processor = RoundCornerImageProcessor(cornerRadius: 61)
         avatarImageView.kf.indicatorType = .activity
         avatarImageView.kf.setImage(with: url,
-                                 placeholder: UIImage(named: "placeholder"),
+                                    placeholder: UIImage(named: "placeholder"),
                                     options: [.processor(processor)])
         avatarImageView.layer.cornerRadius = 35
         avatarImageView.layer.masksToBounds = true

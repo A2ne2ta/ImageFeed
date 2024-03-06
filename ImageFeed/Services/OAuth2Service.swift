@@ -31,20 +31,18 @@ final class OAuth2Service {
         
         let request = authTokenRequest(code: code)
         
-        let session = URLSession.shared
-        let task = session.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
                 guard let self = self else { return }
                 switch result {
                 case .success(let body):
                     let authToken = body.accessToken
                     self.authToken = authToken
                     completion(.success(authToken))
+                    self.task = nil
                 case .failure(let error):
                     self.lastCode = nil
                     completion(.failure(error))
                 }
-                
-                self.task = nil
         }
         self.task = task
         task.resume()

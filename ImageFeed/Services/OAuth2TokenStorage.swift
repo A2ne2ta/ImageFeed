@@ -19,7 +19,11 @@ final class OAuth2TokenStorage {
         }
 
         set {
-            keychain.set(newValue ?? "", forKey: Keys.token.rawValue)
+            if newValue == nil {
+                keychain.removeObject(forKey: Keys.token.rawValue)
+            } else {
+                keychain.set(newValue!, forKey: Keys.token.rawValue)
+            }
         }
     }
     
