@@ -9,13 +9,20 @@ import UIKit
 import WebKit
 import Kingfisher
 
-final class ProfileViewController: UIViewController {
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfileViewPresenterProtocol? { get set }
+    func updateAvatar()
+    
+}
+
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
     
     private let avatarImageView = UIImageView()
     private let nameLabel = UILabel()
     private let loginNameLabel = UILabel()
     private let descriptionLabel = UILabel()
     private var logoutButton: UIButton?
+    var presenter: ProfileViewPresenterProtocol?
     
     private let profileService = ProfileService.shared
     
@@ -24,16 +31,9 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateAvatar()
-            }
-        updateAvatar()
+        presenter = ProfileViewPresenter()
+        presenter?.view = self
+        presenter?.viewDidLoad()
         
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(avatarImageView)
@@ -81,6 +81,7 @@ final class ProfileViewController: UIViewController {
         
         logoutButton.tintColor = UIColor(named: "YP Red")
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
+        logoutButton.accessibilityIdentifier = "logout"
         view.addSubview(logoutButton)
         
         logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
@@ -89,42 +90,13 @@ final class ProfileViewController: UIViewController {
     
     @objc
     private func didTapButton() {
-        let alert = UIAlertController(
-            title: "Пока, пока!",
-            message: "Уверены, что хотите выйти?",
-            preferredStyle: .alert)
-        
-        let acceptAction = UIAlertAction(
-            title: "Да",
-            style: .default) { [weak self] _ in
-                guard let self = self else { return }
-                OAuth2TokenStorage().token = nil
-                HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-                WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-                    records.forEach { record in
-                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
-                    }
-                }
-                guard let window = UIApplication.shared.windows.first else { return assertionFailure("Invalid Configuration") }
-                window.rootViewController = SplashViewController()
-            }
-        
-        let deleteAction = UIAlertAction(
-            title: "Нет",
-            style: .default) { _ in
-                alert.dismiss(animated: true)
-            }
-        
-        alert.addAction(acceptAction)
-        alert.addAction(deleteAction)
-        self.present(alert, animated: true)
+        if let alert = presenter?.prepareAlert() {
+            self.present(alert, animated: true)
+        }
     }
     
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
+    func updateAvatar() {
+        let url = presenter?.getImageURL()
         let processor = RoundCornerImageProcessor(cornerRadius: 61)
         avatarImageView.kf.indicatorType = .activity
         avatarImageView.kf.setImage(with: url,
